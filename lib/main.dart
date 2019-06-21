@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'questions.dart';
-import 'dart:math';
+
+QuestionsBuilder questionBuilder = QuestionsBuilder();
 
 void main() => runApp(Quizzler());
 
@@ -27,25 +28,34 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  final List<Questions> _questions = new List<Questions>();
+  //final List<Questions> _questions = QuestionsBuilder;
+  List<Icon> _iconWidgets = new List<Icon>();
+
   int questionNumber = 0;
 
-  void buildQuestion() {
-    _questions.add(new Questions(
-        question: 'You can lead a cow down stairs but not up stairs.',
-        answer: false));
-    _questions.add(new Questions(
-        question: 'Approximately one quarter of human bones are in the feet.',
-        answer: true));
-    _questions.add(
-        new Questions(question: 'A slug\'s blood is green.', answer: true));
+  String getQuestion() {
+    if (questionNumber >= questionBuilder.questions.length) {
+      return 'Test Completato';
+    }
+    return questionBuilder.questions[questionNumber].question;
   }
 
-  String getQuestion() {
-    if (_questions.length == 0) buildQuestion();
-    if (questionNumber >= _questions.length) return 'Test Completed';
+  void fillIconList(bool answer) {
+    if (questionNumber >= questionBuilder.questions.length) return;
+    bool correctAnswer = questionBuilder.questions[questionNumber].answer;
 
-    return _questions[questionNumber].question;
+    if (answer == correctAnswer)
+      _iconWidgets.add(Icon(
+        Icons.check,
+        color: Colors.green,
+        size: 30.0,
+      ));
+    else
+      _iconWidgets.add(Icon(
+        Icons.close,
+        color: Colors.red,
+        size: 30.0,
+      ));
   }
 
   @override
@@ -77,13 +87,14 @@ class _QuizPageState extends State<QuizPage> {
               textColor: Colors.white,
               color: Colors.green,
               child: Text(
-                'True',
+                'Vero',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.0,
                 ),
               ),
               onPressed: () {
+                fillIconList(true);
                 setState(() {
                   questionNumber += 1;
                 });
@@ -98,13 +109,15 @@ class _QuizPageState extends State<QuizPage> {
             child: FlatButton(
               color: Colors.red,
               child: Text(
-                'False',
+                'Falso',
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
                 ),
               ),
               onPressed: () {
+                fillIconList(false);
+
                 setState(() {
                   questionNumber += 1;
                 });
@@ -112,14 +125,10 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: _iconWidgets)
       ],
     );
   }
 }
-
-/*
-question1: 'You can lead a cow down stairs but not up stairs.', false,
-question2: 'Approximately one quarter of human bones are in the feet.', true,
-question3: 'A slug\'s blood is green.', true,
-*/
