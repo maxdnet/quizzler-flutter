@@ -33,16 +33,29 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   void resetQuizzer() {
     Alert(
-            context: context,
-            title: "Info",
-            desc: "Non ci sono più domande",
-            content: FlatButton(
-                onPressed: () {
-                  questionBuilder.restQuestions();
-                  answerBuilder.resetAnswer();
-                },
-                child: null))
-        .show();
+      context: context,
+      type: AlertType.info,
+      title: "Test Completato",
+      desc: "Clicca OK per resettare le domande.",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+            setState(
+              () {
+                questionBuilder.restQuestions();
+                answerBuilder.resetAnswer();
+              },
+            );
+          },
+          width: 120,
+        )
+      ],
+    ).show();
   }
 
   @override

@@ -2,22 +2,17 @@ class Questions {
   String question;
   bool answer;
 
-  Questions({String question, bool answer}) {
-    this.question = question;
-    this.answer = answer;
-  }
+  Questions(this.question, this.answer);
 }
 
 class QuestionsBuilder {
   int _questionNumber = 0;
 
   List<Questions> _questions = [
-    Questions(question: 'Martina ama Massimiliano?', answer: false),
-    Questions(question: 'Martina è anoressica?', answer: true),
-    Questions(
-        question: 'Massimiliano è pulito e un bravo piccoletto?', answer: true),
-    Questions(
-        question: 'Massimiliano ha comprato il condizionatore?', answer: false),
+    Questions('Martina ama Massimiliano?', false),
+    Questions('Martina è anoressica?', true),
+    Questions('Massimiliano è pulito e un bravo piccoletto?', true),
+    Questions('Massimiliano ha comprato il condizionatore?', false),
   ];
 
   void getNextQuestion() {
