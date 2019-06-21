@@ -21,4 +21,8 @@ class AnswerBuilder {
         size: 30.0,
       ));
   }
+
+  void resetAnswer() {
+    _iconWidgets.clear();
+  }
 }

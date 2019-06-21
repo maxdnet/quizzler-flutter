@@ -36,4 +36,8 @@ class QuestionsBuilder {
   bool anyMoreQuestions() {
     return (_questionNumber < _questions.length);
   }
+
+  void restQuestions() {
+    _questionNumber = 0;
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'questions.dart';
 import 'answer.dart';
 
@@ -30,6 +31,20 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  void resetQuizzer() {
+    Alert(
+            context: context,
+            title: "Info",
+            desc: "Non ci sono più domande",
+            content: FlatButton(
+                onPressed: () {
+                  questionBuilder.restQuestions();
+                  answerBuilder.resetAnswer();
+                },
+                child: null))
+        .show();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -66,12 +81,18 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                if (questionBuilder.anyMoreQuestions())
+                if (questionBuilder.anyMoreQuestions()) {
                   answerBuilder.addAnswer(true, questionBuilder.getAnswer());
-
-                setState(() {
-                  questionBuilder.getNextQuestion();
-                });
+                  setState(() {
+                    questionBuilder.getNextQuestion();
+                  });
+                } else {
+                  setState(
+                    () {
+                      resetQuizzer();
+                    },
+                  );
+                }
                 //The user picked true.
               },
             ),
@@ -90,12 +111,18 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                if (questionBuilder.anyMoreQuestions())
+                if (questionBuilder.anyMoreQuestions()) {
                   answerBuilder.addAnswer(false, questionBuilder.getAnswer());
-
-                setState(() {
-                  questionBuilder.getNextQuestion();
-                });
+                  setState(() {
+                    questionBuilder.getNextQuestion();
+                  });
+                } else {
+                  setState(
+                    () {
+                      resetQuizzer();
+                    },
+                  );
+                }
               },
             ),
           ),
