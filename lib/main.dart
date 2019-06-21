@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'questions.dart';
+import 'answer.dart';
 
 QuestionsBuilder questionBuilder = QuestionsBuilder();
+AnswerBuilder answerBuilder = AnswerBuilder();
 
 void main() => runApp(Quizzler());
 
@@ -28,36 +30,6 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  //final List<Questions> _questions = QuestionsBuilder;
-  List<Icon> _iconWidgets = new List<Icon>();
-
-  int questionNumber = 0;
-
-  String getQuestion() {
-    if (questionNumber >= questionBuilder.questions.length) {
-      return 'Test Completato';
-    }
-    return questionBuilder.questions[questionNumber].question;
-  }
-
-  void fillIconList(bool answer) {
-    if (questionNumber >= questionBuilder.questions.length) return;
-    bool correctAnswer = questionBuilder.questions[questionNumber].answer;
-
-    if (answer == correctAnswer)
-      _iconWidgets.add(Icon(
-        Icons.check,
-        color: Colors.green,
-        size: 30.0,
-      ));
-    else
-      _iconWidgets.add(Icon(
-        Icons.close,
-        color: Colors.red,
-        size: 30.0,
-      ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -70,7 +42,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                getQuestion(),
+                questionBuilder.getQuestion(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -94,9 +66,11 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                fillIconList(true);
+                if (questionBuilder.anyMoreQuestions())
+                  answerBuilder.addAnswer(true, questionBuilder.getAnswer());
+
                 setState(() {
-                  questionNumber += 1;
+                  questionBuilder.getNextQuestion();
                 });
                 //The user picked true.
               },
@@ -116,10 +90,11 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                fillIconList(false);
+                if (questionBuilder.anyMoreQuestions())
+                  answerBuilder.addAnswer(false, questionBuilder.getAnswer());
 
                 setState(() {
-                  questionNumber += 1;
+                  questionBuilder.getNextQuestion();
                 });
               },
             ),
@@ -127,7 +102,7 @@ class _QuizPageState extends State<QuizPage> {
         ),
         Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: _iconWidgets)
+            children: answerBuilder.getAnswers())
       ],
     );
   }

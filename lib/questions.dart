@@ -9,7 +9,9 @@ class Questions {
 }
 
 class QuestionsBuilder {
-  final List<Questions> questions = [
+  int _questionNumber = 0;
+
+  List<Questions> _questions = [
     Questions(question: 'Martina ama Massimiliano?', answer: false),
     Questions(question: 'Martina è anoressica?', answer: true),
     Questions(
@@ -17,4 +19,21 @@ class QuestionsBuilder {
     Questions(
         question: 'Massimiliano ha comprato il condizionatore?', answer: false),
   ];
+
+  void getNextQuestion() {
+    if (anyMoreQuestions()) _questionNumber++;
+  }
+
+  String getQuestion() {
+    if (!anyMoreQuestions()) return 'Test Completato';
+    return _questions[_questionNumber].question;
+  }
+
+  bool getAnswer() {
+    return _questions[_questionNumber].answer;
+  }
+
+  bool anyMoreQuestions() {
+    return (_questionNumber < _questions.length);
+  }
 }
